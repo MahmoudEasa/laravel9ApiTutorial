@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 class CategoriesController extends Controller
 {
     use GeneralTrait;
+
+    public function __construct(){}
+
     public function index()
     {
         $data = Category::selection()->get();

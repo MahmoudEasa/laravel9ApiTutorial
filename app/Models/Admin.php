@@ -7,11 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class Admin extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'created_at',
+        'updated_at',
+    ];
+
+    protected $hidden = [
+        'password',
+    ];
 
 
      // Rest omitted for brevity
@@ -36,18 +48,4 @@ class Admin extends Authenticatable implements JWTSubject
     {
         return [];
     }
-
-
-
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'created_at',
-        'updated_at',
-    ];
-
-    protected $hidden = [
-        'password',
-    ];
 }

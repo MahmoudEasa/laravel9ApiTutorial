@@ -22,12 +22,43 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // All routes / api here must be api authenticated
 Route::group(['middleware' => ['api', 'checkPassword', 'checkLanguage']], function () {
-    Route::post('get_main_categories', [CategoriesController::class, 'index']);
-    Route::post('get_category', [CategoriesController::class, 'getCategory']);
-    Route::post('change_category_status', [CategoriesController::class, 'changeStatus']);
+    Route::group(['controller' => CategoriesController::class], function (){
+        Route::post('get_main_categories', 'index');
+        Route::post('get_category', 'getCategory');
+        Route::post('change_category_status', 'changeStatus');
+    });
 
-    Route::group(['prefix' => 'admin'], function() {
-        Route::post('login', [AuthController::class, 'login']);
+    Route::group(['controller' => AuthController::class], function(){
+        Route::group(['prefix' => 'admin'], function () {
+            Route::get('login', 'login')->name('login');
+            Route::post('login', 'login')->name('login');
+            Route::post('logout', 'logout')->name('logout');
+            Route::post('register', 'register')->name('register');
+            Route::post('refresh', 'refresh')->name('refresh');
+
+            // invalidate token security side
+
+            // broken access controller user enumeration
+        });
+
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('login', 'login')->name('login');
+            Route::post('login', 'login')->name('login');
+            Route::post('logout', 'logout')->name('logout');
+            Route::post('register', 'register')->name('register');
+            Route::post('refresh', 'refresh')->name('refresh');
+
+            // invalidate token security side
+
+            // broken access controller user enumeration
+        });
+
+    });
+
+    Route::group(['prefix' => 'user'], function () {
+        Route::post('profile', function () {
+            return 'Only authenticated user can reach me';
+        });
     });
 
 });
