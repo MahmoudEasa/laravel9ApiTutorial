@@ -7,6 +7,7 @@ use Closure;
 use Illuminate\Http\Request;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenExpiredException;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use PHPOpenSourceSaver\JWTAuth\Http\Middleware\BaseMiddleware;
 // use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 // use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenExpiredException;
@@ -29,7 +30,8 @@ class AssignGuard extends BaseMiddleware
             $request->headers->set('auth-token', (string) $token, true);
             $request->headers->set('Authorization', 'Bearer '.$token, true);
             try{
-                $user = $this->auth->authenticate($request);
+                // $user = $this->auth->authenticate($request);
+                $user = JWTAuth::parseToken()->authenticate();
             }catch(TokenExpiredException $ex){
                 return $this->returnError('','Unauthenticated user');
             }catch(JWTException $ex){
